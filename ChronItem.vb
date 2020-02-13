@@ -10,11 +10,11 @@ Public Class ChronItem
 
     Private cv_Status As String
     Private cv_Time As String
-    Private cv_Account As String
     Private cv_Symbol As String
     Private cv_Side As String
     Private cv_Quantity As Integer
     Private cv_Destination As String
+    Private cv_Account As String
     Private cv_OrderResponse As String
 
     Private cv_structSTIOrder As structSTIOrder
@@ -27,11 +27,6 @@ Public Class ChronItem
     Public ReadOnly Property Time() As String
         Get
             Return cv_Time
-        End Get
-    End Property
-    Public ReadOnly Property Account() As String
-        Get
-            Return cv_Account
         End Get
     End Property
     Public ReadOnly Property Symbol() As String
@@ -52,6 +47,11 @@ Public Class ChronItem
     Public ReadOnly Property Destination() As String
         Get
             Return cv_Destination
+        End Get
+    End Property
+    Public ReadOnly Property Account() As String
+        Get
+            Return cv_Account
         End Get
     End Property
     Public ReadOnly Property OrderResponse() As String

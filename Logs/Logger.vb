@@ -7,8 +7,6 @@ Public Class Logger
     Private cv_STTradeList As BindingList(Of STTradeLog)
     Private cv_STErroList As BindingList(Of STErrorLog)
 
-    Private cv_STServerTime As String
-
     Public Property ActivityList() As BindingList(Of ActivityLog)
         Get
             Return cv_ActivityList
@@ -34,12 +32,10 @@ Public Class Logger
         End Set
     End Property
 
-    Public Sub New(ByRef sp_STServerTime As String)
+    Public Sub New()
         cv_ActivityList = New BindingList(Of ActivityLog)
         cv_STTradeList = New BindingList(Of STTradeLog)
         cv_STErroList = New BindingList(Of STErrorLog)
-
-        cv_STServerTime = sp_STServerTime
     End Sub
 
     Public Sub LogInfoActivity(ByVal sp_Details As String)
@@ -59,23 +55,23 @@ Public Class Logger
         FileLogger.LogError(sp_Details)
     End Sub
 
-    Public Sub LogSTTrade(ByVal sp_Trade As structSTITradeUpdate)
+    Public Sub LogSTTrade(ByVal sp_ServerTime As String, ByVal sp_Trade As structSTITradeUpdate)
         Try
             If (cv_STTradeList.Count = 0) Then
-                cv_STTradeList.Add(New STTradeLog(cv_STServerTime, sp_Trade))
+                cv_STTradeList.Add(New STTradeLog(sp_ServerTime, sp_Trade))
             Else
-                cv_STTradeList.Insert(0, New STTradeLog(cv_STServerTime, sp_Trade))
+                cv_STTradeList.Insert(0, New STTradeLog(sp_ServerTime, sp_Trade))
             End If
         Catch ex As Exception
             LogErrorActivity("@LogSTTrade >>> " + ex.Message)
         End Try
     End Sub
-    Public Sub LogSTError(ByVal sp_Error As structSTIOrderReject)
+    Public Sub LogSTError(ByVal sp_ServerTime As String, ByVal sp_Error As structSTIOrderReject)
         Try
             If (cv_STErroList.Count = 0) Then
-                cv_STErroList.Add(New STErrorLog(cv_STServerTime, sp_Error))
+                cv_STErroList.Add(New STErrorLog(sp_ServerTime, sp_Error))
             Else
-                cv_STErroList.Insert(0, New STErrorLog(cv_STServerTime, sp_Error))
+                cv_STErroList.Insert(0, New STErrorLog(sp_ServerTime, sp_Error))
             End If
         Catch ex As Exception
             LogErrorActivity("@LogSTError >>> " + ex.Message)

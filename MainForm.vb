@@ -8,6 +8,8 @@ Imports SterlingLib
 Public Class MainForm
 
 #Region "Class Variables"
+    Private Const AUTOSAVE_FILE = "AutoSave.pcql"
+
     Private cv_STIApp As STIApp
     Private WithEvents cv_STIEvents As STIEvents
     Private cv_STIAcctMaint As STIAcctMaint
@@ -20,7 +22,7 @@ Public Class MainForm
     Private cv_IsPulseRunning As Boolean = False
 
     Private cv_Logger As Logger
-    Private WithEvents cv_ChronItemList As BindingList(Of ChronItem)
+    Private WithEvents cv_ChronItemList As List(Of ChronItem)
 #End Region
 
     Private Delegate Sub DelegateRefreshDataGridView(ByRef dp_DataGridView As DataGridView)
@@ -29,6 +31,7 @@ Public Class MainForm
             Me.Invoke(New DelegateRefreshDataGridView(AddressOf RefreshDataGridView), sp_DataGridView)
         Else
             sp_DataGridView.Refresh()
+            sp_DataGridView.AutoResizeColumns()
             InQueueItemsLabel.Text = cv_ChronItemList.Count
             ProcessedItemsLabel.Text = cv_ChronItemList.Where(Function(fp_chronItem) fp_chronItem.IsProcessed).Count
             FailedItemsLabel.Text = cv_ChronItemList.Where(Function(fp_chronItem) fp_chronItem.IsFailed).Count
@@ -50,8 +53,8 @@ Public Class MainForm
 
             STTimer.Start()
 
-            cv_Logger = New Logger(cv_STServerTime) 'Timer should start before instantiating logger
-            cv_ChronItemList = New BindingList(Of ChronItem)
+            cv_Logger = New Logger() 'Timer should start before instantiating logger
+            cv_ChronItemList = New List(Of ChronItem)
 
             BindActivityGrid.DataSource = cv_Logger.ActivityList
             BindSTTradeGrid.DataSource = cv_Logger.STTradeList
@@ -78,6 +81,13 @@ Public Class MainForm
             AccountInput.DataSource = cv_AccountList
             DestinationInput.DataSource = cv_DestinationList
             SideInput.DataSource = STMessage.Sides.Values.ToArray
+
+            If My.Computer.FileSystem.FileExists(AUTOSAVE_FILE) Then
+                If LoadList(AUTOSAVE_FILE) Then
+                    My.Computer.FileSystem.DeleteFile(AUTOSAVE_FILE)
+                    MsgBox("Loaded auto saved list. (Note: Status not included)")
+                End If
+            End If
         Catch ex As Exception
             MsgBox("No running Sterling Trader Pro detected.")
             Environment.Exit(0)
@@ -114,7 +124,7 @@ Public Class MainForm
         End Try
     End Sub
 
-    Private Sub LoadList(ByVal sp_File As String)
+    Private Function LoadList(ByVal sp_File As String) As Boolean
         Try
             If My.Computer.FileSystem.FileExists(sp_File) Then
                 Dim lv_SerializableChronList As New List(Of SerializableChronItem)
@@ -124,7 +134,7 @@ Public Class MainForm
                 lv_SerializableChronList = bf.Deserialize(fs)
                 fs.Close()
 
-                cv_ChronItemList = New BindingList(Of ChronItem)
+                cv_ChronItemList = New List(Of ChronItem)
                 BindChronItemGrid.DataSource = cv_ChronItemList
 
                 For Each lv_item In lv_SerializableChronList
@@ -139,13 +149,16 @@ Public Class MainForm
                 Next
 
                 cv_Logger.LogInfoActivity("Loaded queue list from: " + sp_File)
+                Return True
             Else
                 cv_Logger.LogErrorActivity(sp_File + " does not exist.")
+                Return False
             End If
         Catch ex As Exception
             cv_Logger.LogErrorActivity("@LoadList >>> " + ex.Message)
+            Return False
         End Try
-    End Sub
+    End Function
 
 #Region "Events"
     Private Sub cv_STIEvents_OnSTITradeUpdateXML(ByRef bstrTrade As String) Handles cv_STIEvents.OnSTITradeUpdateXML
@@ -154,7 +167,7 @@ Public Class MainForm
             Dim lv_xs As XmlSerializer = New XmlSerializer(GetType(structSTITradeUpdate))
             Dim lv_STITradeUpdate As structSTITradeUpdate = lv_xs.Deserialize(lv_sr)
 
-            cv_Logger.LogSTTrade(lv_STITradeUpdate)
+            cv_Logger.LogSTTrade(cv_STServerTime, lv_STITradeUpdate)
             RefreshDataGridView(ChronItemGrid)
         Catch ex As Exception
             cv_Logger.LogErrorActivity("@cv_STIEvents_OnSTITradeUpdateXML >>> " + ex.Message)
@@ -167,7 +180,7 @@ Public Class MainForm
             Dim lv_xs As XmlSerializer = New XmlSerializer(GetType(structSTIOrderReject))
             Dim lv_STIOrderReject As structSTIOrderReject = lv_xs.Deserialize(lv_sr)
 
-            cv_Logger.LogSTError(lv_STIOrderReject)
+            cv_Logger.LogSTError(cv_STServerTime, lv_STIOrderReject)
             RefreshDataGridView(ChronItemGrid)
         Catch ex As Exception
             cv_Logger.LogErrorActivity("@cv_STIEvents_OnSTIOrderRejectXML >>> " + ex.Message)
@@ -193,7 +206,7 @@ Public Class MainForm
 
     Private Sub AddQueueButton_Click(sender As Object, e As EventArgs) Handles AddQueueButton.Click
         Try
-            If (QuantityInput.Value > 0) Then
+            If (QuantityInput.Value > 0 And SymbolInput.Text <> "") Then
                 BindChronItemGrid.Add(
                     New ChronItem(
                         TimeInput.Value.ToString("HH:mm:ss"),
@@ -220,10 +233,6 @@ Public Class MainForm
         cv_Logger.LogInfoActivity("Deleted item from queue.")
     End Sub
 
-    Private Sub cv_ChronItemList_ListChanged(sender As Object, e As ListChangedEventArgs) Handles cv_ChronItemList.ListChanged
-        InQueueItemsLabel.Text = cv_ChronItemList.Count
-    End Sub
-
     Private Sub SaveChronListMenu_Click(sender As Object, e As EventArgs) Handles SaveChronListMenu.Click
         If cv_ChronItemList.Count = 0 Then
             MsgBox("Nothing to save.")
@@ -247,7 +256,7 @@ Public Class MainForm
             MsgBox("List is already cleared.")
         Else
             If (MessageBox.Show("Clearing the list cannot be undone. Continue?", "Clearing List", MessageBoxButtons.YesNo) = DialogResult.Yes) Then
-                cv_ChronItemList = New BindingList(Of ChronItem)
+                cv_ChronItemList = New List(Of ChronItem)
                 BindChronItemGrid.DataSource = cv_ChronItemList
             End If
         End If
@@ -273,6 +282,68 @@ Public Class MainForm
             PulseStatusLabel.ForeColor = Color.Red
             PulseStatusLabel.Text = "PAUSED"
         End If
+    End Sub
+
+    Private Sub cv_STIEvents_OnSTIShutdown() Handles cv_STIEvents.OnSTIShutdown
+        If cv_ChronItemList.Count > 0 Then
+            SaveList(AUTOSAVE_FILE)
+        End If
+        MsgBox("Sterling Trader Pro no longer detected.")
+        Environment.Exit(0)
+    End Sub
+
+    Private Sub ChronItemGrid_ColumnHeaderMouseClick(sender As Object, e As DataGridViewCellMouseEventArgs) Handles ChronItemGrid.ColumnHeaderMouseClick
+        Dim lv_SortOrder As SortOrder = ChronItemGrid.Columns.Item(e.ColumnIndex).HeaderCell.SortGlyphDirection
+
+        If lv_SortOrder = SortOrder.Ascending Then
+            ChronItemGrid.Columns.Item(e.ColumnIndex).HeaderCell.SortGlyphDirection = SortOrder.Descending
+        Else
+            ChronItemGrid.Columns.Item(e.ColumnIndex).HeaderCell.SortGlyphDirection = SortOrder.Ascending
+        End If
+
+        If lv_SortOrder = SortOrder.Descending Then
+            If e.ColumnIndex = 0 Then
+                cv_ChronItemList.Sort(Function(x, y) x.Status.CompareTo(y.Status))
+            ElseIf e.ColumnIndex = 1 Then
+                cv_ChronItemList.Sort(Function(x, y) x.Time.CompareTo(y.Time))
+            ElseIf e.ColumnIndex = 2 Then
+                cv_ChronItemList.Sort(Function(x, y) x.Symbol.CompareTo(y.Symbol))
+            ElseIf e.ColumnIndex = 3 Then
+                cv_ChronItemList.Sort(Function(x, y) x.Side.CompareTo(y.Side))
+            ElseIf e.ColumnIndex = 4 Then
+                cv_ChronItemList.Sort(Function(x, y) x.Quantity.CompareTo(y.Quantity))
+            ElseIf e.ColumnIndex = 5 Then
+                cv_ChronItemList.Sort(Function(x, y) x.Destination.CompareTo(y.Destination))
+            ElseIf e.ColumnIndex = 6 Then
+                cv_ChronItemList.Sort(Function(x, y) x.Account.CompareTo(y.Account))
+            ElseIf e.ColumnIndex = 7 Then
+                cv_ChronItemList.Sort(Function(x, y) x.OrderResponse.CompareTo(y.OrderResponse))
+            End If
+        Else
+            If e.ColumnIndex = 0 Then
+                cv_ChronItemList.Sort(Function(y, x) x.Status.CompareTo(y.Status))
+            ElseIf e.ColumnIndex = 1 Then
+                cv_ChronItemList.Sort(Function(y, x) x.Time.CompareTo(y.Time))
+            ElseIf e.ColumnIndex = 2 Then
+                cv_ChronItemList.Sort(Function(y, x) x.Symbol.CompareTo(y.Symbol))
+            ElseIf e.ColumnIndex = 3 Then
+                cv_ChronItemList.Sort(Function(y, x) x.Side.CompareTo(y.Side))
+            ElseIf e.ColumnIndex = 4 Then
+                cv_ChronItemList.Sort(Function(y, x) x.Quantity.CompareTo(y.Quantity))
+            ElseIf e.ColumnIndex = 5 Then
+                cv_ChronItemList.Sort(Function(y, x) x.Destination.CompareTo(y.Destination))
+            ElseIf e.ColumnIndex = 6 Then
+                cv_ChronItemList.Sort(Function(y, x) x.Account.CompareTo(y.Account))
+            ElseIf e.ColumnIndex = 7 Then
+                cv_ChronItemList.Sort(Function(y, x) x.OrderResponse.CompareTo(y.OrderResponse))
+            End If
+        End If
+
+        RefreshDataGridView(ChronItemGrid)
+    End Sub
+
+    Private Sub BindChronItemGrid_ListChanged(sender As Object, e As ListChangedEventArgs) Handles BindChronItemGrid.ListChanged
+        InQueueItemsLabel.Text = cv_ChronItemList.Count
     End Sub
 #End Region
 End Class

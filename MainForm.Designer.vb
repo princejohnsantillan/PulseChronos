@@ -23,6 +23,9 @@ Partial Class MainForm
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MainForm))
         Me.MainTabControl = New System.Windows.Forms.TabControl()
         Me.ControlTabPage = New System.Windows.Forms.TabPage()
@@ -43,15 +46,15 @@ Partial Class MainForm
         Me.PulseStatusLabel = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
-        Me.Label5 = New System.Windows.Forms.Label()
         Me.AddQueueButton = New System.Windows.Forms.Button()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.TimeInput = New System.Windows.Forms.DateTimePicker()
         Me.AccountInput = New System.Windows.Forms.ComboBox()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
         Me.SymbolInput = New System.Windows.Forms.TextBox()
         Me.SideInput = New System.Windows.Forms.ComboBox()
         Me.QuantityInput = New System.Windows.Forms.NumericUpDown()
@@ -148,15 +151,15 @@ Partial Class MainForm
         Me.SplitContainer1.Panel2.Controls.Add(Me.ChronItemGrid)
         Me.SplitContainer1.Panel2.Controls.Add(Me.ChronGridMenu)
         Me.SplitContainer1.Size = New System.Drawing.Size(966, 625)
-        Me.SplitContainer1.SplitterDistance = 238
+        Me.SplitContainer1.SplitterDistance = 255
         Me.SplitContainer1.TabIndex = 0
         '
         'GroupBox3
         '
         Me.GroupBox3.Controls.Add(Me.TableLayoutPanel2)
-        Me.GroupBox3.Location = New System.Drawing.Point(8, 320)
+        Me.GroupBox3.Location = New System.Drawing.Point(8, 325)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(220, 240)
+        Me.GroupBox3.Size = New System.Drawing.Size(240, 240)
         Me.GroupBox3.TabIndex = 4
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Info"
@@ -189,7 +192,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.0!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.0!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 4.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(214, 221)
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(234, 221)
         Me.TableLayoutPanel2.TabIndex = 0
         '
         'Label11
@@ -209,7 +212,7 @@ Partial Class MainForm
         Me.FailedItemsLabel.ForeColor = System.Drawing.Color.Red
         Me.FailedItemsLabel.Location = New System.Drawing.Point(83, 175)
         Me.FailedItemsLabel.Name = "FailedItemsLabel"
-        Me.FailedItemsLabel.Size = New System.Drawing.Size(128, 35)
+        Me.FailedItemsLabel.Size = New System.Drawing.Size(148, 35)
         Me.FailedItemsLabel.TabIndex = 11
         Me.FailedItemsLabel.Text = "0"
         Me.FailedItemsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -231,7 +234,7 @@ Partial Class MainForm
         Me.ProcessedItemsLabel.ForeColor = System.Drawing.Color.Green
         Me.ProcessedItemsLabel.Location = New System.Drawing.Point(83, 140)
         Me.ProcessedItemsLabel.Name = "ProcessedItemsLabel"
-        Me.ProcessedItemsLabel.Size = New System.Drawing.Size(128, 35)
+        Me.ProcessedItemsLabel.Size = New System.Drawing.Size(148, 35)
         Me.ProcessedItemsLabel.TabIndex = 7
         Me.ProcessedItemsLabel.Text = "0"
         Me.ProcessedItemsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -242,7 +245,7 @@ Partial Class MainForm
         Me.InQueueItemsLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.InQueueItemsLabel.Location = New System.Drawing.Point(83, 105)
         Me.InQueueItemsLabel.Name = "InQueueItemsLabel"
-        Me.InQueueItemsLabel.Size = New System.Drawing.Size(128, 35)
+        Me.InQueueItemsLabel.Size = New System.Drawing.Size(148, 35)
         Me.InQueueItemsLabel.TabIndex = 5
         Me.InQueueItemsLabel.Text = "0"
         Me.InQueueItemsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -273,7 +276,7 @@ Partial Class MainForm
         Me.LoginTraderLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LoginTraderLabel.Location = New System.Drawing.Point(83, 70)
         Me.LoginTraderLabel.Name = "LoginTraderLabel"
-        Me.LoginTraderLabel.Size = New System.Drawing.Size(128, 35)
+        Me.LoginTraderLabel.Size = New System.Drawing.Size(148, 35)
         Me.LoginTraderLabel.TabIndex = 3
         Me.LoginTraderLabel.Text = "---"
         Me.LoginTraderLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -285,7 +288,7 @@ Partial Class MainForm
         Me.STAPIEnabledLabel.ForeColor = System.Drawing.Color.Red
         Me.STAPIEnabledLabel.Location = New System.Drawing.Point(83, 35)
         Me.STAPIEnabledLabel.Name = "STAPIEnabledLabel"
-        Me.STAPIEnabledLabel.Size = New System.Drawing.Size(128, 35)
+        Me.STAPIEnabledLabel.Size = New System.Drawing.Size(148, 35)
         Me.STAPIEnabledLabel.TabIndex = 2
         Me.STAPIEnabledLabel.Text = "FALSE"
         Me.STAPIEnabledLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -317,7 +320,7 @@ Partial Class MainForm
         Me.PulseStatusLabel.ForeColor = System.Drawing.Color.Red
         Me.PulseStatusLabel.Location = New System.Drawing.Point(83, 0)
         Me.PulseStatusLabel.Name = "PulseStatusLabel"
-        Me.PulseStatusLabel.Size = New System.Drawing.Size(128, 35)
+        Me.PulseStatusLabel.Size = New System.Drawing.Size(148, 35)
         Me.PulseStatusLabel.TabIndex = 13
         Me.PulseStatusLabel.Text = "PAUSED"
         Me.PulseStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -329,110 +332,62 @@ Partial Class MainForm
         Me.GroupBox1.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox1.Size = New System.Drawing.Size(220, 220)
+        Me.GroupBox1.Size = New System.Drawing.Size(240, 230)
         Me.GroupBox1.TabIndex = 3
         Me.GroupBox1.TabStop = False
         '
         'TableLayoutPanel1
         '
         Me.TableLayoutPanel1.ColumnCount = 2
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.Controls.Add(Me.Label5, 0, 5)
         Me.TableLayoutPanel1.Controls.Add(Me.AddQueueButton, 0, 6)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label4, 0, 4)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label6, 0, 3)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label3, 0, 2)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label2, 0, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.Label1, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.TimeInput, 1, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.AccountInput, 1, 1)
-        Me.TableLayoutPanel1.Controls.Add(Me.SymbolInput, 1, 2)
-        Me.TableLayoutPanel1.Controls.Add(Me.SideInput, 1, 3)
-        Me.TableLayoutPanel1.Controls.Add(Me.QuantityInput, 1, 4)
-        Me.TableLayoutPanel1.Controls.Add(Me.DestinationInput, 1, 5)
+        Me.TableLayoutPanel1.Controls.Add(Me.AccountInput, 1, 5)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label3, 0, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label6, 0, 2)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label4, 0, 3)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label5, 0, 4)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label2, 0, 5)
+        Me.TableLayoutPanel1.Controls.Add(Me.SymbolInput, 1, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.SideInput, 1, 2)
+        Me.TableLayoutPanel1.Controls.Add(Me.QuantityInput, 1, 3)
+        Me.TableLayoutPanel1.Controls.Add(Me.DestinationInput, 1, 4)
         Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(4, 17)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 8
+        Me.TableLayoutPanel1.RowCount = 7
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 2.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(212, 199)
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(232, 209)
         Me.TableLayoutPanel1.TabIndex = 0
-        '
-        'Label5
-        '
-        Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label5.Location = New System.Drawing.Point(3, 135)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(64, 27)
-        Me.Label5.TabIndex = 16
-        Me.Label5.Text = "Destination"
-        Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'AddQueueButton
         '
         Me.TableLayoutPanel1.SetColumnSpan(Me.AddQueueButton, 2)
         Me.AddQueueButton.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.AddQueueButton.Location = New System.Drawing.Point(3, 165)
+        Me.AddQueueButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.AddQueueButton.Location = New System.Drawing.Point(3, 177)
         Me.AddQueueButton.Name = "AddQueueButton"
-        Me.AddQueueButton.Size = New System.Drawing.Size(206, 21)
+        Me.AddQueueButton.Size = New System.Drawing.Size(226, 29)
         Me.AddQueueButton.TabIndex = 15
         Me.AddQueueButton.Text = "Add to Queue"
         Me.AddQueueButton.UseVisualStyleBackColor = True
         '
-        'Label4
-        '
-        Me.Label4.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label4.Location = New System.Drawing.Point(3, 108)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(64, 27)
-        Me.Label4.TabIndex = 13
-        Me.Label4.Text = "Quantity"
-        Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'Label6
-        '
-        Me.Label6.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label6.Location = New System.Drawing.Point(3, 81)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(64, 27)
-        Me.Label6.TabIndex = 12
-        Me.Label6.Text = "Side"
-        Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'Label3
-        '
-        Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label3.Location = New System.Drawing.Point(3, 54)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(64, 27)
-        Me.Label3.TabIndex = 11
-        Me.Label3.Text = "Symbol"
-        Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'Label2
-        '
-        Me.Label2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label2.Location = New System.Drawing.Point(3, 27)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(64, 27)
-        Me.Label2.TabIndex = 10
-        Me.Label2.Text = "Account"
-        Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
         'Label1
         '
         Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.Location = New System.Drawing.Point(3, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(64, 27)
+        Me.Label1.Size = New System.Drawing.Size(79, 29)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Time"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -441,11 +396,12 @@ Partial Class MainForm
         '
         Me.TimeInput.CustomFormat = "HH:mm:ss"
         Me.TimeInput.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TimeInput.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TimeInput.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.TimeInput.Location = New System.Drawing.Point(73, 3)
+        Me.TimeInput.Location = New System.Drawing.Point(88, 3)
         Me.TimeInput.Name = "TimeInput"
         Me.TimeInput.ShowUpDown = True
-        Me.TimeInput.Size = New System.Drawing.Size(136, 20)
+        Me.TimeInput.Size = New System.Drawing.Size(141, 22)
         Me.TimeInput.TabIndex = 4
         Me.TimeInput.Value = New Date(2020, 2, 2, 0, 0, 0, 0)
         '
@@ -453,57 +409,117 @@ Partial Class MainForm
         '
         Me.AccountInput.Dock = System.Windows.Forms.DockStyle.Fill
         Me.AccountInput.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.AccountInput.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.AccountInput.FormattingEnabled = True
-        Me.AccountInput.Location = New System.Drawing.Point(73, 30)
+        Me.AccountInput.Location = New System.Drawing.Point(88, 148)
         Me.AccountInput.Name = "AccountInput"
-        Me.AccountInput.Size = New System.Drawing.Size(136, 21)
-        Me.AccountInput.TabIndex = 5
+        Me.AccountInput.Size = New System.Drawing.Size(141, 24)
+        Me.AccountInput.TabIndex = 9
+        '
+        'Label3
+        '
+        Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.Location = New System.Drawing.Point(3, 29)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(79, 29)
+        Me.Label3.TabIndex = 11
+        Me.Label3.Text = "Symbol"
+        Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Label6
+        '
+        Me.Label6.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label6.Location = New System.Drawing.Point(3, 58)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(79, 29)
+        Me.Label6.TabIndex = 12
+        Me.Label6.Text = "Side"
+        Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Label4
+        '
+        Me.Label4.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.Location = New System.Drawing.Point(3, 87)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(79, 29)
+        Me.Label4.TabIndex = 13
+        Me.Label4.Text = "Quantity"
+        Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Label5
+        '
+        Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label5.Location = New System.Drawing.Point(3, 116)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(79, 29)
+        Me.Label5.TabIndex = 16
+        Me.Label5.Text = "Destination"
+        Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Label2
+        '
+        Me.Label2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.Location = New System.Drawing.Point(3, 145)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(79, 29)
+        Me.Label2.TabIndex = 16
+        Me.Label2.Text = "Account"
+        Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'SymbolInput
         '
         Me.SymbolInput.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SymbolInput.Location = New System.Drawing.Point(73, 57)
+        Me.SymbolInput.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.SymbolInput.Location = New System.Drawing.Point(88, 32)
         Me.SymbolInput.Name = "SymbolInput"
-        Me.SymbolInput.Size = New System.Drawing.Size(136, 20)
-        Me.SymbolInput.TabIndex = 6
+        Me.SymbolInput.Size = New System.Drawing.Size(141, 22)
+        Me.SymbolInput.TabIndex = 5
         '
         'SideInput
         '
         Me.SideInput.Dock = System.Windows.Forms.DockStyle.Fill
         Me.SideInput.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.SideInput.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.SideInput.FormattingEnabled = True
-        Me.SideInput.Location = New System.Drawing.Point(73, 84)
+        Me.SideInput.Location = New System.Drawing.Point(88, 61)
         Me.SideInput.Name = "SideInput"
-        Me.SideInput.Size = New System.Drawing.Size(136, 21)
-        Me.SideInput.TabIndex = 7
+        Me.SideInput.Size = New System.Drawing.Size(141, 24)
+        Me.SideInput.TabIndex = 6
         '
         'QuantityInput
         '
         Me.QuantityInput.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.QuantityInput.Location = New System.Drawing.Point(73, 111)
+        Me.QuantityInput.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.QuantityInput.Location = New System.Drawing.Point(88, 90)
         Me.QuantityInput.Maximum = New Decimal(New Integer() {999999999, 0, 0, 0})
         Me.QuantityInput.Name = "QuantityInput"
-        Me.QuantityInput.Size = New System.Drawing.Size(136, 20)
-        Me.QuantityInput.TabIndex = 8
+        Me.QuantityInput.Size = New System.Drawing.Size(141, 22)
+        Me.QuantityInput.TabIndex = 7
         '
         'DestinationInput
         '
         Me.DestinationInput.Dock = System.Windows.Forms.DockStyle.Fill
         Me.DestinationInput.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.DestinationInput.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.DestinationInput.FormattingEnabled = True
-        Me.DestinationInput.Location = New System.Drawing.Point(73, 138)
+        Me.DestinationInput.Location = New System.Drawing.Point(88, 119)
         Me.DestinationInput.Name = "DestinationInput"
-        Me.DestinationInput.Size = New System.Drawing.Size(136, 21)
-        Me.DestinationInput.TabIndex = 9
+        Me.DestinationInput.Size = New System.Drawing.Size(141, 24)
+        Me.DestinationInput.TabIndex = 8
         '
         'GroupBox2
         '
         Me.GroupBox2.Controls.Add(Me.ServerTimeLabel)
-        Me.GroupBox2.Location = New System.Drawing.Point(8, 4)
+        Me.GroupBox2.Location = New System.Drawing.Point(8, 5)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Padding = New System.Windows.Forms.Padding(2)
         Me.GroupBox2.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.GroupBox2.Size = New System.Drawing.Size(220, 80)
+        Me.GroupBox2.Size = New System.Drawing.Size(240, 80)
         Me.GroupBox2.TabIndex = 2
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Server Time"
@@ -511,11 +527,11 @@ Partial Class MainForm
         'ServerTimeLabel
         '
         Me.ServerTimeLabel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ServerTimeLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ServerTimeLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 27.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ServerTimeLabel.ForeColor = System.Drawing.Color.Green
         Me.ServerTimeLabel.Location = New System.Drawing.Point(2, 15)
         Me.ServerTimeLabel.Name = "ServerTimeLabel"
-        Me.ServerTimeLabel.Size = New System.Drawing.Size(216, 63)
+        Me.ServerTimeLabel.Size = New System.Drawing.Size(236, 63)
         Me.ServerTimeLabel.TabIndex = 0
         Me.ServerTimeLabel.Text = "00:00:00"
         Me.ServerTimeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -527,16 +543,40 @@ Partial Class MainForm
         Me.ChronItemGrid.AllowUserToResizeRows = False
         Me.ChronItemGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells
         Me.ChronItemGrid.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.GradientActiveCaption
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ChronItemGrid.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.ChronItemGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.GradientActiveCaption
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.Desktop
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.ChronItemGrid.DefaultCellStyle = DataGridViewCellStyle2
         Me.ChronItemGrid.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ChronItemGrid.EnableHeadersVisualStyles = False
         Me.ChronItemGrid.Location = New System.Drawing.Point(0, 24)
         Me.ChronItemGrid.MultiSelect = False
         Me.ChronItemGrid.Name = "ChronItemGrid"
         Me.ChronItemGrid.ReadOnly = True
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.GradientActiveCaption
+        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ChronItemGrid.RowHeadersDefaultCellStyle = DataGridViewCellStyle3
         Me.ChronItemGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders
         Me.ChronItemGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.ChronItemGrid.Size = New System.Drawing.Size(724, 601)
+        Me.ChronItemGrid.Size = New System.Drawing.Size(707, 601)
         Me.ChronItemGrid.TabIndex = 0
         '
         'ChronGridMenu
@@ -544,7 +584,7 @@ Partial Class MainForm
         Me.ChronGridMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.PulseSwitchMenu, Me.SaveChronListMenu, Me.LoadChronListMenu, Me.ClearChronListMenu, Me.RefreshChronListMenu})
         Me.ChronGridMenu.Location = New System.Drawing.Point(0, 0)
         Me.ChronGridMenu.Name = "ChronGridMenu"
-        Me.ChronGridMenu.Size = New System.Drawing.Size(724, 24)
+        Me.ChronGridMenu.Size = New System.Drawing.Size(707, 24)
         Me.ChronGridMenu.TabIndex = 1
         Me.ChronGridMenu.Text = "MenuStrip1"
         '
@@ -767,7 +807,6 @@ Partial Class MainForm
     Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
     Friend WithEvents Label1 As Label
     Friend WithEvents TimeInput As DateTimePicker
-    Friend WithEvents AccountInput As ComboBox
     Friend WithEvents SymbolInput As TextBox
     Friend WithEvents SideInput As ComboBox
     Friend WithEvents QuantityInput As NumericUpDown
@@ -775,7 +814,6 @@ Partial Class MainForm
     Friend WithEvents Label4 As Label
     Friend WithEvents Label6 As Label
     Friend WithEvents Label3 As Label
-    Friend WithEvents Label2 As Label
     Friend WithEvents AddQueueButton As Button
     Friend WithEvents Label5 As Label
     Friend WithEvents GroupBox3 As GroupBox
@@ -799,4 +837,6 @@ Partial Class MainForm
     Friend WithEvents Label12 As Label
     Friend WithEvents PulseStatusLabel As Label
     Friend WithEvents PulseSwitchMenu As ToolStripMenuItem
+    Friend WithEvents AccountInput As ComboBox
+    Friend WithEvents Label2 As Label
 End Class
