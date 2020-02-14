@@ -62,25 +62,25 @@ Public Class ChronItem
 
     Public Sub New(
                   ByVal sp_Time As String,
-                  ByVal sp_Account As String,
                   ByVal sp_Symbol As String,
                   ByVal sp_Side As String,
                   ByVal sp_Quantity As Integer,
-                  ByVal sp_Destination As String)
+                  ByVal sp_Destination As String,
+                  ByVal sp_Account As String)
 
         cv_Time = sp_Time
-        cv_Account = sp_Account
         cv_Symbol = sp_Symbol
         cv_Side = sp_Side
         cv_Quantity = sp_Quantity
         cv_Destination = sp_Destination
+        cv_Account = sp_Account
         cv_Status = QUEUED_STATUS
 
-        cv_structSTIOrder.bstrAccount = cv_Account
         cv_structSTIOrder.bstrSymbol = cv_Symbol
         cv_structSTIOrder.bstrSide = EncodeSide(cv_Side)
         cv_structSTIOrder.nQuantity = cv_Quantity
         cv_structSTIOrder.bstrDestination = cv_Destination
+        cv_structSTIOrder.bstrAccount = cv_Account
 
         'Additionl required fields
         cv_structSTIOrder.nPriceType = STIPriceTypes.ptSTIMkt 'MARKET

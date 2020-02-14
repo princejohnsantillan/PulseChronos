@@ -30,6 +30,7 @@ Partial Class MainForm
         Me.MainTabControl = New System.Windows.Forms.TabControl()
         Me.ControlTabPage = New System.Windows.Forms.TabPage()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.PulseSwitchButton = New System.Windows.Forms.Button()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.Label11 = New System.Windows.Forms.Label()
@@ -63,7 +64,6 @@ Partial Class MainForm
         Me.ServerTimeLabel = New System.Windows.Forms.Label()
         Me.ChronItemGrid = New System.Windows.Forms.DataGridView()
         Me.ChronGridMenu = New System.Windows.Forms.MenuStrip()
-        Me.PulseSwitchMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.SaveChronListMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.LoadChronListMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.ClearChronListMenu = New System.Windows.Forms.ToolStripMenuItem()
@@ -121,6 +121,7 @@ Partial Class MainForm
         Me.MainTabControl.SelectedIndex = 0
         Me.MainTabControl.Size = New System.Drawing.Size(980, 657)
         Me.MainTabControl.TabIndex = 0
+        Me.MainTabControl.TabStop = False
         '
         'ControlTabPage
         '
@@ -142,6 +143,7 @@ Partial Class MainForm
         '
         'SplitContainer1.Panel1
         '
+        Me.SplitContainer1.Panel1.Controls.Add(Me.PulseSwitchButton)
         Me.SplitContainer1.Panel1.Controls.Add(Me.GroupBox3)
         Me.SplitContainer1.Panel1.Controls.Add(Me.GroupBox1)
         Me.SplitContainer1.Panel1.Controls.Add(Me.GroupBox2)
@@ -154,10 +156,21 @@ Partial Class MainForm
         Me.SplitContainer1.SplitterDistance = 255
         Me.SplitContainer1.TabIndex = 0
         '
+        'PulseSwitchButton
+        '
+        Me.PulseSwitchButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.PulseSwitchButton.Location = New System.Drawing.Point(8, 10)
+        Me.PulseSwitchButton.Name = "PulseSwitchButton"
+        Me.PulseSwitchButton.Size = New System.Drawing.Size(240, 23)
+        Me.PulseSwitchButton.TabIndex = 0
+        Me.PulseSwitchButton.TabStop = False
+        Me.PulseSwitchButton.Text = "TURN ON"
+        Me.PulseSwitchButton.UseVisualStyleBackColor = True
+        '
         'GroupBox3
         '
         Me.GroupBox3.Controls.Add(Me.TableLayoutPanel2)
-        Me.GroupBox3.Location = New System.Drawing.Point(8, 325)
+        Me.GroupBox3.Location = New System.Drawing.Point(8, 360)
         Me.GroupBox3.Name = "GroupBox3"
         Me.GroupBox3.Size = New System.Drawing.Size(240, 240)
         Me.GroupBox3.TabIndex = 4
@@ -328,7 +341,7 @@ Partial Class MainForm
         'GroupBox1
         '
         Me.GroupBox1.Controls.Add(Me.TableLayoutPanel1)
-        Me.GroupBox1.Location = New System.Drawing.Point(8, 90)
+        Me.GroupBox1.Location = New System.Drawing.Point(8, 125)
         Me.GroupBox1.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Padding = New System.Windows.Forms.Padding(4)
@@ -377,7 +390,7 @@ Partial Class MainForm
         Me.AddQueueButton.Location = New System.Drawing.Point(3, 177)
         Me.AddQueueButton.Name = "AddQueueButton"
         Me.AddQueueButton.Size = New System.Drawing.Size(226, 29)
-        Me.AddQueueButton.TabIndex = 15
+        Me.AddQueueButton.TabIndex = 7
         Me.AddQueueButton.Text = "Add to Queue"
         Me.AddQueueButton.UseVisualStyleBackColor = True
         '
@@ -402,7 +415,7 @@ Partial Class MainForm
         Me.TimeInput.Name = "TimeInput"
         Me.TimeInput.ShowUpDown = True
         Me.TimeInput.Size = New System.Drawing.Size(141, 22)
-        Me.TimeInput.TabIndex = 4
+        Me.TimeInput.TabIndex = 1
         Me.TimeInput.Value = New Date(2020, 2, 2, 0, 0, 0, 0)
         '
         'AccountInput
@@ -414,7 +427,7 @@ Partial Class MainForm
         Me.AccountInput.Location = New System.Drawing.Point(88, 148)
         Me.AccountInput.Name = "AccountInput"
         Me.AccountInput.Size = New System.Drawing.Size(141, 24)
-        Me.AccountInput.TabIndex = 9
+        Me.AccountInput.TabIndex = 6
         '
         'Label3
         '
@@ -478,7 +491,7 @@ Partial Class MainForm
         Me.SymbolInput.Location = New System.Drawing.Point(88, 32)
         Me.SymbolInput.Name = "SymbolInput"
         Me.SymbolInput.Size = New System.Drawing.Size(141, 22)
-        Me.SymbolInput.TabIndex = 5
+        Me.SymbolInput.TabIndex = 2
         '
         'SideInput
         '
@@ -489,7 +502,7 @@ Partial Class MainForm
         Me.SideInput.Location = New System.Drawing.Point(88, 61)
         Me.SideInput.Name = "SideInput"
         Me.SideInput.Size = New System.Drawing.Size(141, 24)
-        Me.SideInput.TabIndex = 6
+        Me.SideInput.TabIndex = 3
         '
         'QuantityInput
         '
@@ -499,7 +512,7 @@ Partial Class MainForm
         Me.QuantityInput.Maximum = New Decimal(New Integer() {999999999, 0, 0, 0})
         Me.QuantityInput.Name = "QuantityInput"
         Me.QuantityInput.Size = New System.Drawing.Size(141, 22)
-        Me.QuantityInput.TabIndex = 7
+        Me.QuantityInput.TabIndex = 4
         '
         'DestinationInput
         '
@@ -510,12 +523,12 @@ Partial Class MainForm
         Me.DestinationInput.Location = New System.Drawing.Point(88, 119)
         Me.DestinationInput.Name = "DestinationInput"
         Me.DestinationInput.Size = New System.Drawing.Size(141, 24)
-        Me.DestinationInput.TabIndex = 8
+        Me.DestinationInput.TabIndex = 5
         '
         'GroupBox2
         '
         Me.GroupBox2.Controls.Add(Me.ServerTimeLabel)
-        Me.GroupBox2.Location = New System.Drawing.Point(8, 5)
+        Me.GroupBox2.Location = New System.Drawing.Point(8, 40)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Padding = New System.Windows.Forms.Padding(2)
         Me.GroupBox2.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -578,25 +591,16 @@ Partial Class MainForm
         Me.ChronItemGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.ChronItemGrid.Size = New System.Drawing.Size(707, 601)
         Me.ChronItemGrid.TabIndex = 0
+        Me.ChronItemGrid.TabStop = False
         '
         'ChronGridMenu
         '
-        Me.ChronGridMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.PulseSwitchMenu, Me.SaveChronListMenu, Me.LoadChronListMenu, Me.ClearChronListMenu, Me.RefreshChronListMenu})
+        Me.ChronGridMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SaveChronListMenu, Me.LoadChronListMenu, Me.ClearChronListMenu, Me.RefreshChronListMenu})
         Me.ChronGridMenu.Location = New System.Drawing.Point(0, 0)
         Me.ChronGridMenu.Name = "ChronGridMenu"
         Me.ChronGridMenu.Size = New System.Drawing.Size(707, 24)
         Me.ChronGridMenu.TabIndex = 1
         Me.ChronGridMenu.Text = "MenuStrip1"
-        '
-        'PulseSwitchMenu
-        '
-        Me.PulseSwitchMenu.BackColor = System.Drawing.Color.Red
-        Me.PulseSwitchMenu.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
-        Me.PulseSwitchMenu.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.PulseSwitchMenu.ForeColor = System.Drawing.Color.White
-        Me.PulseSwitchMenu.Name = "PulseSwitchMenu"
-        Me.PulseSwitchMenu.Size = New System.Drawing.Size(58, 20)
-        Me.PulseSwitchMenu.Text = "Paused"
         '
         'SaveChronListMenu
         '
@@ -670,6 +674,7 @@ Partial Class MainForm
         Me.ActivityLogGrid.RowHeadersVisible = False
         Me.ActivityLogGrid.Size = New System.Drawing.Size(952, 593)
         Me.ActivityLogGrid.TabIndex = 0
+        Me.ActivityLogGrid.TabStop = False
         '
         'STTradeTabPage
         '
@@ -696,6 +701,7 @@ Partial Class MainForm
         Me.STTradeGrid.RowHeadersVisible = False
         Me.STTradeGrid.Size = New System.Drawing.Size(952, 593)
         Me.STTradeGrid.TabIndex = 0
+        Me.STTradeGrid.TabStop = False
         '
         'STErrorTabPage
         '
@@ -722,8 +728,12 @@ Partial Class MainForm
         Me.STErrorGrid.RowHeadersVisible = False
         Me.STErrorGrid.Size = New System.Drawing.Size(952, 593)
         Me.STErrorGrid.TabIndex = 0
+        Me.STErrorGrid.TabStop = False
         '
         'STTimer
+        '
+        '
+        'BindChronItemGrid
         '
         '
         'OpenFileChronList
@@ -836,7 +846,7 @@ Partial Class MainForm
     Friend WithEvents ClearChronListMenu As ToolStripMenuItem
     Friend WithEvents Label12 As Label
     Friend WithEvents PulseStatusLabel As Label
-    Friend WithEvents PulseSwitchMenu As ToolStripMenuItem
     Friend WithEvents AccountInput As ComboBox
     Friend WithEvents Label2 As Label
+    Friend WithEvents PulseSwitchButton As Button
 End Class

@@ -32,7 +32,7 @@ Public Class MainForm
         Else
             sp_DataGridView.Refresh()
             sp_DataGridView.AutoResizeColumns()
-            InQueueItemsLabel.Text = cv_ChronItemList.Count
+            'InQueueItemsLabel.Text = cv_ChronItemList.Count
             ProcessedItemsLabel.Text = cv_ChronItemList.Where(Function(fp_chronItem) fp_chronItem.IsProcessed).Count
             FailedItemsLabel.Text = cv_ChronItemList.Where(Function(fp_chronItem) fp_chronItem.IsFailed).Count
         End If
@@ -105,11 +105,11 @@ Public Class MainForm
             For Each lv_item In cv_ChronItemList
                 lv_SerializableChronList.Add(New SerializableChronItem(
                     lv_item.Time,
-                    lv_item.Account,
                     lv_item.Symbol,
                     lv_item.Side,
                     lv_item.Quantity,
-                    lv_item.Destination
+                    lv_item.Destination,
+                    lv_item.Account
                 ))
             Next
 
@@ -138,14 +138,15 @@ Public Class MainForm
                 BindChronItemGrid.DataSource = cv_ChronItemList
 
                 For Each lv_item In lv_SerializableChronList
-                    cv_ChronItemList.Add(New ChronItem(
+                    BindChronItemGrid.Add(New ChronItem(
                         lv_item.Time,
-                        lv_item.Account,
                         lv_item.Symbol,
                         lv_item.Side,
                         lv_item.Quantity,
-                        lv_item.Destination
+                        lv_item.Destination,
+                        lv_item.Account
                     ))
+
                 Next
 
                 cv_Logger.LogInfoActivity("Loaded queue list from: " + sp_File)
@@ -197,7 +198,6 @@ Public Class MainForm
                 For Each lv_item In cv_ChronItemList.Where(Function(fp_chronItem) fp_chronItem.IsQueued And fp_chronItem.IsOnTime(lv_Time))
                     lv_item.SubmitSTOrder()
                 Next
-                RefreshDataGridView(ChronItemGrid)
             End If
         Catch ex As Exception
             cv_Logger.LogErrorActivity("@STTimer_Tick >>> " + ex.Message)
@@ -210,11 +210,11 @@ Public Class MainForm
                 BindChronItemGrid.Add(
                     New ChronItem(
                         TimeInput.Value.ToString("HH:mm:ss"),
-                        AccountInput.SelectedValue,
-                        SymbolInput.Text,
+                        SymbolInput.Text.ToUpper,
                         SideInput.SelectedValue,
                         Int(QuantityInput.Value),
-                        DestinationInput.SelectedValue
+                        DestinationInput.SelectedValue,
+                        AccountInput.SelectedValue
                     )
                 )
 
@@ -267,23 +267,6 @@ Public Class MainForm
         MsgBox("List refreshed.")
     End Sub
 
-    Private Sub PulseSwitchMenu_Click(sender As Object, e As EventArgs) Handles PulseSwitchMenu.Click
-        cv_IsPulseRunning = Not cv_IsPulseRunning
-        If cv_IsPulseRunning Then
-            PulseSwitchMenu.BackColor = Color.Green
-            PulseSwitchMenu.Text = "Running"
-
-            PulseStatusLabel.ForeColor = Color.Green
-            PulseStatusLabel.Text = "RUNNING"
-        Else
-            PulseSwitchMenu.BackColor = Color.Red
-            PulseSwitchMenu.Text = "Paused"
-
-            PulseStatusLabel.ForeColor = Color.Red
-            PulseStatusLabel.Text = "PAUSED"
-        End If
-    End Sub
-
     Private Sub cv_STIEvents_OnSTIShutdown() Handles cv_STIEvents.OnSTIShutdown
         If cv_ChronItemList.Count > 0 Then
             SaveList(AUTOSAVE_FILE)
@@ -293,15 +276,21 @@ Public Class MainForm
     End Sub
 
     Private Sub ChronItemGrid_ColumnHeaderMouseClick(sender As Object, e As DataGridViewCellMouseEventArgs) Handles ChronItemGrid.ColumnHeaderMouseClick
-        Dim lv_SortOrder As SortOrder = ChronItemGrid.Columns.Item(e.ColumnIndex).HeaderCell.SortGlyphDirection
+        Dim lv_OriginalSortOrder As SortOrder = ChronItemGrid.Columns.Item(e.ColumnIndex).HeaderCell.SortGlyphDirection
+        Dim lv_NewSortOrder As SortOrder = SortOrder.Ascending
 
-        If lv_SortOrder = SortOrder.Ascending Then
-            ChronItemGrid.Columns.Item(e.ColumnIndex).HeaderCell.SortGlyphDirection = SortOrder.Descending
+        For Each lv_Column As DataGridViewColumn In ChronItemGrid.Columns
+            lv_Column.HeaderCell.SortGlyphDirection = SortOrder.None
+        Next
+
+        If lv_OriginalSortOrder <> SortOrder.Descending Then
+            lv_NewSortOrder = SortOrder.Descending
         Else
-            ChronItemGrid.Columns.Item(e.ColumnIndex).HeaderCell.SortGlyphDirection = SortOrder.Ascending
+            lv_NewSortOrder = SortOrder.Ascending
         End If
+        ChronItemGrid.Columns.Item(e.ColumnIndex).HeaderCell.SortGlyphDirection = lv_NewSortOrder
 
-        If lv_SortOrder = SortOrder.Descending Then
+        If lv_NewSortOrder <> SortOrder.Descending Then
             If e.ColumnIndex = 0 Then
                 cv_ChronItemList.Sort(Function(x, y) x.Status.CompareTo(y.Status))
             ElseIf e.ColumnIndex = 1 Then
@@ -344,6 +333,19 @@ Public Class MainForm
 
     Private Sub BindChronItemGrid_ListChanged(sender As Object, e As ListChangedEventArgs) Handles BindChronItemGrid.ListChanged
         InQueueItemsLabel.Text = cv_ChronItemList.Count
+    End Sub
+
+    Private Sub PulseSwitchButton_Click(sender As Object, e As EventArgs) Handles PulseSwitchButton.Click
+        cv_IsPulseRunning = Not cv_IsPulseRunning
+        If cv_IsPulseRunning Then
+            PulseSwitchButton.Text = "TURN OFF"
+            PulseStatusLabel.ForeColor = Color.Green
+            PulseStatusLabel.Text = "RUNNING"
+        Else
+            PulseSwitchButton.Text = "TURN ON"
+            PulseStatusLabel.ForeColor = Color.Red
+            PulseStatusLabel.Text = "PAUSED"
+        End If
     End Sub
 #End Region
 End Class
