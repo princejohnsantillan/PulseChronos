@@ -186,6 +186,8 @@ Public Class ChronItem
         sp_DataGridView.Columns.Add(lv_DestinationColumn)
         sp_DataGridView.Columns.Add(lv_AccountColumn)
         sp_DataGridView.Columns.Add(lv_OrderResponseColumn)
+
+        sp_DataGridView.AutoResizeColumns()
     End Sub
 
 End Class
