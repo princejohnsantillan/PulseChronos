@@ -578,7 +578,6 @@ Partial Class MainForm
         Me.ChronItemGrid.Location = New System.Drawing.Point(0, 24)
         Me.ChronItemGrid.MultiSelect = False
         Me.ChronItemGrid.Name = "ChronItemGrid"
-        Me.ChronItemGrid.ReadOnly = True
         DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control
         DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))

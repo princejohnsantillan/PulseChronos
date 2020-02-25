@@ -1,4 +1,5 @@
-﻿Imports SterlingLib
+﻿Imports System.Text.RegularExpressions
+Imports SterlingLib
 Public Class ChronItem
 
     Inherits STMessage
@@ -24,35 +25,66 @@ Public Class ChronItem
             Return cv_Status
         End Get
     End Property
-    Public ReadOnly Property Time() As String
+    Public Property Time() As String
         Get
             Return cv_Time
         End Get
+        Set(value As String)
+            Dim lv_regex = New Regex("^([0-1][0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9])$")
+            If lv_regex.Match(value).Success Then
+                cv_Time = value
+            Else
+                MsgBox("Invalid time.")
+            End If
+        End Set
     End Property
-    Public ReadOnly Property Symbol() As String
+    Public Property Symbol() As String
         Get
             Return cv_Symbol
         End Get
+        Set(value As String)
+            cv_Symbol = value.ToUpper
+        End Set
     End Property
-    Public ReadOnly Property Side() As String
+    Public Property Side() As String
         Get
             Return cv_Side
         End Get
+        Set(value As String)
+            If Sides.Values.ToArray.Contains(value) Then
+                cv_Side = value
+            Else
+                MsgBox("Invalid side.")
+            End If
+        End Set
     End Property
-    Public ReadOnly Property Quantity() As Integer
+    Public Property Quantity() As Integer
         Get
             Return cv_Quantity
         End Get
+        Set(value As Integer)
+            If value <= 0 Then
+                MsgBox("Quantity must be a positive whole number.")
+            Else
+                cv_Quantity = value
+            End If
+        End Set
     End Property
-    Public ReadOnly Property Destination() As String
+    Public Property Destination() As String
         Get
             Return cv_Destination
         End Get
+        Set(value As String)
+            cv_Destination = value
+        End Set
     End Property
-    Public ReadOnly Property Account() As String
+    Public Property Account() As String
         Get
             Return cv_Account
         End Get
+        Set(value As String)
+            cv_Account = value
+        End Set
     End Property
     Public ReadOnly Property OrderResponse() As String
         Get
@@ -129,4 +161,31 @@ Public Class ChronItem
             End Try
         End If
     End Sub
+
+    Public Shared Sub InitializeTable(ByRef sp_DataGridView As DataGridView, ByVal sp_Destination As Array, ByVal sp_Accounts As Array)
+        Dim lv_Destinations() As String = sp_Destination.Clone()
+        Dim lv_Accounts() As String = sp_Accounts.Clone()
+
+        sp_DataGridView.AutoGenerateColumns = False
+        sp_DataGridView.Columns.Clear()
+
+        Dim lv_StatusColumn As DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn() With {.DataPropertyName = "Status", .Name = "Status"}
+        Dim lv_TimeColumn As DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn() With {.DataPropertyName = "Time", .Name = "Time"}
+        Dim lv_SymbolColumn As DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn() With {.DataPropertyName = "Symbol", .Name = "Symbol"}
+        Dim lv_SideColumn As DataGridViewComboBoxColumn = New DataGridViewComboBoxColumn() With {.DataSource = Sides.Values.ToArray, .DataPropertyName = "Side", .Name = "Side"}
+        Dim lv_QuantityColumn As DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn() With {.DataPropertyName = "Quantity", .Name = "Quantity"}
+        Dim lv_DestinationColumn As DataGridViewComboBoxColumn = New DataGridViewComboBoxColumn() With {.DataSource = lv_Destinations, .DataPropertyName = "Destination", .Name = "Destination"}
+        Dim lv_AccountColumn As DataGridViewComboBoxColumn = New DataGridViewComboBoxColumn() With {.DataSource = lv_Accounts, .DataPropertyName = "Account", .Name = "Account"}
+        Dim lv_OrderResponseColumn As DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn() With {.DataPropertyName = "OrderResponse", .Name = "OrderResponse"}
+
+        sp_DataGridView.Columns.Add(lv_StatusColumn)
+        sp_DataGridView.Columns.Add(lv_TimeColumn)
+        sp_DataGridView.Columns.Add(lv_SymbolColumn)
+        sp_DataGridView.Columns.Add(lv_SideColumn)
+        sp_DataGridView.Columns.Add(lv_QuantityColumn)
+        sp_DataGridView.Columns.Add(lv_DestinationColumn)
+        sp_DataGridView.Columns.Add(lv_AccountColumn)
+        sp_DataGridView.Columns.Add(lv_OrderResponseColumn)
+    End Sub
+
 End Class

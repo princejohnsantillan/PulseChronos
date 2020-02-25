@@ -82,6 +82,8 @@ Public Class MainForm
             DestinationInput.DataSource = cv_DestinationList
             SideInput.DataSource = STMessage.Sides.Values.ToArray
 
+            ChronItem.InitializeTable(ChronItemGrid, cv_DestinationList, cv_AccountList)
+
             If My.Computer.FileSystem.FileExists(AUTOSAVE_FILE) Then
                 If LoadList(AUTOSAVE_FILE) Then
                     My.Computer.FileSystem.DeleteFile(AUTOSAVE_FILE)
@@ -89,6 +91,7 @@ Public Class MainForm
                 End If
             End If
         Catch ex As Exception
+            MsgBox(ex.Message)
             MsgBox("No running Sterling Trader Pro detected.")
             Environment.Exit(0)
         End Try
@@ -346,6 +349,10 @@ Public Class MainForm
             PulseStatusLabel.ForeColor = Color.Red
             PulseStatusLabel.Text = "PAUSED"
         End If
+    End Sub
+
+    Private Sub ChronItemGrid_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles ChronItemGrid.DataError
+        MsgBox("Invalid value.")
     End Sub
 #End Region
 End Class
