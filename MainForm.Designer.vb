@@ -732,6 +732,12 @@ Partial Class MainForm
         'STTimer
         '
         '
+        'BindSTTradeGrid
+        '
+        '
+        'BindSTErrorGrid
+        '
+        '
         'BindChronItemGrid
         '
         '

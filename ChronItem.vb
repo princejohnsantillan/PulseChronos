@@ -162,21 +162,21 @@ Public Class ChronItem
         End If
     End Sub
 
-    Public Shared Sub InitializeTable(ByRef sp_DataGridView As DataGridView, ByVal sp_Destination As Array, ByVal sp_Accounts As Array)
+    Public Shared Sub InitializeGrid(ByRef sp_DataGridView As DataGridView, ByVal sp_Destination As Array, ByVal sp_Accounts As Array)
         Dim lv_Destinations() As String = sp_Destination.Clone()
         Dim lv_Accounts() As String = sp_Accounts.Clone()
 
         sp_DataGridView.AutoGenerateColumns = False
         sp_DataGridView.Columns.Clear()
 
-        Dim lv_StatusColumn As DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn() With {.DataPropertyName = "Status", .Name = "Status"}
-        Dim lv_TimeColumn As DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn() With {.DataPropertyName = "Time", .Name = "Time"}
-        Dim lv_SymbolColumn As DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn() With {.DataPropertyName = "Symbol", .Name = "Symbol"}
-        Dim lv_SideColumn As DataGridViewComboBoxColumn = New DataGridViewComboBoxColumn() With {.DataSource = Sides.Values.ToArray, .DataPropertyName = "Side", .Name = "Side"}
-        Dim lv_QuantityColumn As DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn() With {.DataPropertyName = "Quantity", .Name = "Quantity"}
-        Dim lv_DestinationColumn As DataGridViewComboBoxColumn = New DataGridViewComboBoxColumn() With {.DataSource = lv_Destinations, .DataPropertyName = "Destination", .Name = "Destination"}
-        Dim lv_AccountColumn As DataGridViewComboBoxColumn = New DataGridViewComboBoxColumn() With {.DataSource = lv_Accounts, .DataPropertyName = "Account", .Name = "Account"}
-        Dim lv_OrderResponseColumn As DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn() With {.DataPropertyName = "OrderResponse", .Name = "OrderResponse"}
+        Dim lv_StatusColumn As DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn() With {.DataPropertyName = "Status", .Name = "Status", .SortMode = DataGridViewColumnSortMode.Programmatic}
+        Dim lv_TimeColumn As DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn() With {.DataPropertyName = "Time", .Name = "Time", .SortMode = DataGridViewColumnSortMode.Programmatic}
+        Dim lv_SymbolColumn As DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn() With {.DataPropertyName = "Symbol", .Name = "Symbol", .SortMode = DataGridViewColumnSortMode.Programmatic}
+        Dim lv_SideColumn As DataGridViewComboBoxColumn = New DataGridViewComboBoxColumn() With {.DataSource = Sides.Values.ToArray, .DataPropertyName = "Side", .Name = "Side", .SortMode = DataGridViewColumnSortMode.Programmatic}
+        Dim lv_QuantityColumn As DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn() With {.DataPropertyName = "Quantity", .Name = "Quantity", .SortMode = DataGridViewColumnSortMode.Programmatic}
+        Dim lv_DestinationColumn As DataGridViewComboBoxColumn = New DataGridViewComboBoxColumn() With {.DataSource = lv_Destinations, .DataPropertyName = "Destination", .Name = "Destination", .SortMode = DataGridViewColumnSortMode.Programmatic}
+        Dim lv_AccountColumn As DataGridViewComboBoxColumn = New DataGridViewComboBoxColumn() With {.DataSource = lv_Accounts, .DataPropertyName = "Account", .Name = "Account", .SortMode = DataGridViewColumnSortMode.Programmatic}
+        Dim lv_OrderResponseColumn As DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn() With {.DataPropertyName = "OrderResponse", .Name = "OrderResponse", .SortMode = DataGridViewColumnSortMode.Programmatic}
 
         sp_DataGridView.Columns.Add(lv_StatusColumn)
         sp_DataGridView.Columns.Add(lv_TimeColumn)

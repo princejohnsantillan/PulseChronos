@@ -4,6 +4,7 @@ Imports System.Runtime.Serialization.Formatters.Binary
 Imports System.Text.RegularExpressions
 Imports System.Xml.Serialization
 Imports SterlingLib
+Imports Microsoft.Office.Interop.Excel
 
 Public Class MainForm
 
@@ -24,19 +25,6 @@ Public Class MainForm
     Private cv_Logger As Logger
     Private WithEvents cv_ChronItemList As List(Of ChronItem)
 #End Region
-
-    Private Delegate Sub DelegateRefreshDataGridView(ByRef dp_DataGridView As DataGridView)
-    Private Sub RefreshDataGridView(ByRef sp_DataGridView As DataGridView)
-        If (sp_DataGridView.InvokeRequired) Then
-            Me.Invoke(New DelegateRefreshDataGridView(AddressOf RefreshDataGridView), sp_DataGridView)
-        Else
-            sp_DataGridView.Refresh()
-            sp_DataGridView.AutoResizeColumns()
-            'InQueueItemsLabel.Text = cv_ChronItemList.Count
-            ProcessedItemsLabel.Text = cv_ChronItemList.Where(Function(fp_chronItem) fp_chronItem.IsProcessed).Count
-            FailedItemsLabel.Text = cv_ChronItemList.Where(Function(fp_chronItem) fp_chronItem.IsFailed).Count
-        End If
-    End Sub
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.Text = ProductName & " " & ProductVersion
@@ -82,7 +70,7 @@ Public Class MainForm
             DestinationInput.DataSource = cv_DestinationList
             SideInput.DataSource = STMessage.Sides.Values.ToArray
 
-            ChronItem.InitializeTable(ChronItemGrid, cv_DestinationList, cv_AccountList)
+            ChronItem.InitializeGrid(ChronItemGrid, cv_DestinationList, cv_AccountList)
 
             If My.Computer.FileSystem.FileExists(AUTOSAVE_FILE) Then
                 If LoadList(AUTOSAVE_FILE) Then
@@ -130,27 +118,36 @@ Public Class MainForm
     Private Function LoadList(ByVal sp_File As String) As Boolean
         Try
             If My.Computer.FileSystem.FileExists(sp_File) Then
-                Dim lv_SerializableChronList As New List(Of SerializableChronItem)
 
-                Dim fs As Stream = New FileStream(sp_File, FileMode.Open)
-                Dim bf As BinaryFormatter = New BinaryFormatter()
-                lv_SerializableChronList = bf.Deserialize(fs)
-                fs.Close()
+                Dim lv_FileExtension As String = Path.GetExtension(sp_File)
 
-                cv_ChronItemList = New List(Of ChronItem)
-                BindChronItemGrid.DataSource = cv_ChronItemList
+                If lv_FileExtension = ".pcql" Then
+                    Dim lv_SerializableChronList As New List(Of SerializableChronItem)
 
-                For Each lv_item In lv_SerializableChronList
-                    BindChronItemGrid.Add(New ChronItem(
-                        lv_item.Time,
-                        lv_item.Symbol,
-                        lv_item.Side,
-                        lv_item.Quantity,
-                        lv_item.Destination,
-                        lv_item.Account
-                    ))
+                    Dim fs As Stream = New FileStream(sp_File, FileMode.Open)
+                    Dim bf As BinaryFormatter = New BinaryFormatter()
+                    lv_SerializableChronList = bf.Deserialize(fs)
+                    fs.Close()
 
-                Next
+                    cv_ChronItemList = New List(Of ChronItem)
+                    BindChronItemGrid.DataSource = cv_ChronItemList
+
+                    For Each lv_item In lv_SerializableChronList
+                        BindChronItemGrid.Add(New ChronItem(
+                            lv_item.Time,
+                            lv_item.Symbol,
+                            lv_item.Side,
+                            lv_item.Quantity,
+                            lv_item.Destination,
+                            lv_item.Account
+                        ))
+                    Next
+                ElseIf lv_FileExtension = ".xls" Or lv_FileExtension = ".xlsx" Then
+                    MsgBox("Improperly plotted Excel files might generate a wrong or incomplete list. PLease review your list.")
+                Else
+                    cv_Logger.LogErrorActivity("Invalid file type.")
+                    Return False
+                End If
 
                 cv_Logger.LogInfoActivity("Loaded queue list from: " + sp_File)
                 Return True
@@ -164,31 +161,29 @@ Public Class MainForm
         End Try
     End Function
 
-#Region "Events"
-    Private Sub cv_STIEvents_OnSTITradeUpdateXML(ByRef bstrTrade As String) Handles cv_STIEvents.OnSTITradeUpdateXML
-        Try
-            Dim lv_sr As New StringReader(bstrTrade)
-            Dim lv_xs As XmlSerializer = New XmlSerializer(GetType(structSTITradeUpdate))
-            Dim lv_STITradeUpdate As structSTITradeUpdate = lv_xs.Deserialize(lv_sr)
-
-            cv_Logger.LogSTTrade(cv_STServerTime, lv_STITradeUpdate)
-            RefreshDataGridView(ChronItemGrid)
-        Catch ex As Exception
-            cv_Logger.LogErrorActivity("@cv_STIEvents_OnSTITradeUpdateXML >>> " + ex.Message)
-        End Try
+    Private Sub RefreshGrid(ByRef sp_DataGridView As DataGridView)
+        sp_DataGridView.Refresh()
+        sp_DataGridView.AutoResizeColumns()
     End Sub
 
-    Private Sub cv_STIEvents_OnSTIOrderRejectXML(ByRef bstrOrder As String) Handles cv_STIEvents.OnSTIOrderRejectXML
-        Try
-            Dim lv_sr As New StringReader(bstrOrder)
-            Dim lv_xs As XmlSerializer = New XmlSerializer(GetType(structSTIOrderReject))
-            Dim lv_STIOrderReject As structSTIOrderReject = lv_xs.Deserialize(lv_sr)
+    Private Sub RecountChronStats()
+        InQueueItemsLabel.Text = cv_ChronItemList.Count
+        ProcessedItemsLabel.Text = cv_ChronItemList.Where(Function(fp_chronItem) fp_chronItem.IsProcessed).Count
+        FailedItemsLabel.Text = cv_ChronItemList.Where(Function(fp_chronItem) fp_chronItem.IsFailed).Count
+    End Sub
 
-            cv_Logger.LogSTError(cv_STServerTime, lv_STIOrderReject)
-            RefreshDataGridView(ChronItemGrid)
-        Catch ex As Exception
-            cv_Logger.LogErrorActivity("@cv_STIEvents_OnSTIOrderRejectXML >>> " + ex.Message)
-        End Try
+#Region "Events"
+    Private Sub PulseSwitchButton_Click(sender As Object, e As EventArgs) Handles PulseSwitchButton.Click
+        cv_IsPulseRunning = Not cv_IsPulseRunning
+        If cv_IsPulseRunning Then
+            PulseSwitchButton.Text = "TURN OFF"
+            PulseStatusLabel.ForeColor = Color.Green
+            PulseStatusLabel.Text = "RUNNING"
+        Else
+            PulseSwitchButton.Text = "TURN ON"
+            PulseStatusLabel.ForeColor = Color.Red
+            PulseStatusLabel.Text = "PAUSED"
+        End If
     End Sub
 
     Private Sub STTimer_Tick(sender As Object, e As EventArgs) Handles STTimer.Tick
@@ -204,6 +199,30 @@ Public Class MainForm
             End If
         Catch ex As Exception
             cv_Logger.LogErrorActivity("@STTimer_Tick >>> " + ex.Message)
+        End Try
+    End Sub
+
+    Private Sub cv_STIEvents_OnSTITradeUpdateXML(ByRef bstrTrade As String) Handles cv_STIEvents.OnSTITradeUpdateXML
+        Try
+            Dim lv_sr As New StringReader(bstrTrade)
+            Dim lv_xs As XmlSerializer = New XmlSerializer(GetType(structSTITradeUpdate))
+            Dim lv_STITradeUpdate As structSTITradeUpdate = lv_xs.Deserialize(lv_sr)
+
+            cv_Logger.LogSTTrade(cv_STServerTime, lv_STITradeUpdate)
+        Catch ex As Exception
+            cv_Logger.LogErrorActivity("@cv_STIEvents_OnSTITradeUpdateXML >>> " + ex.Message)
+        End Try
+    End Sub
+
+    Private Sub cv_STIEvents_OnSTIOrderRejectXML(ByRef bstrOrder As String) Handles cv_STIEvents.OnSTIOrderRejectXML
+        Try
+            Dim lv_sr As New StringReader(bstrOrder)
+            Dim lv_xs As XmlSerializer = New XmlSerializer(GetType(structSTIOrderReject))
+            Dim lv_STIOrderReject As structSTIOrderReject = lv_xs.Deserialize(lv_sr)
+
+            cv_Logger.LogSTError(cv_STServerTime, lv_STIOrderReject)
+        Catch ex As Exception
+            cv_Logger.LogErrorActivity("@cv_STIEvents_OnSTIOrderRejectXML >>> " + ex.Message)
         End Try
     End Sub
 
@@ -266,16 +285,8 @@ Public Class MainForm
     End Sub
 
     Private Sub RefreshChronListMenu_Click(sender As Object, e As EventArgs) Handles RefreshChronListMenu.Click
-        RefreshDataGridView(ChronItemGrid)
+        RefreshGrid(ChronItemGrid)
         MsgBox("List refreshed.")
-    End Sub
-
-    Private Sub cv_STIEvents_OnSTIShutdown() Handles cv_STIEvents.OnSTIShutdown
-        If cv_ChronItemList.Count > 0 Then
-            SaveList(AUTOSAVE_FILE)
-        End If
-        MsgBox("Sterling Trader Pro no longer detected.")
-        Environment.Exit(0)
     End Sub
 
     Private Sub ChronItemGrid_ColumnHeaderMouseClick(sender As Object, e As DataGridViewCellMouseEventArgs) Handles ChronItemGrid.ColumnHeaderMouseClick
@@ -331,28 +342,31 @@ Public Class MainForm
             End If
         End If
 
-        RefreshDataGridView(ChronItemGrid)
-    End Sub
-
-    Private Sub BindChronItemGrid_ListChanged(sender As Object, e As ListChangedEventArgs) Handles BindChronItemGrid.ListChanged
-        InQueueItemsLabel.Text = cv_ChronItemList.Count
-    End Sub
-
-    Private Sub PulseSwitchButton_Click(sender As Object, e As EventArgs) Handles PulseSwitchButton.Click
-        cv_IsPulseRunning = Not cv_IsPulseRunning
-        If cv_IsPulseRunning Then
-            PulseSwitchButton.Text = "TURN OFF"
-            PulseStatusLabel.ForeColor = Color.Green
-            PulseStatusLabel.Text = "RUNNING"
-        Else
-            PulseSwitchButton.Text = "TURN ON"
-            PulseStatusLabel.ForeColor = Color.Red
-            PulseStatusLabel.Text = "PAUSED"
-        End If
+        RefreshGrid(ChronItemGrid)
     End Sub
 
     Private Sub ChronItemGrid_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles ChronItemGrid.DataError
         MsgBox("Invalid value.")
+    End Sub
+
+    Private Sub BindChronItemGrid_ListChanged(sender As Object, e As ListChangedEventArgs) Handles BindChronItemGrid.ListChanged
+        RecountChronStats()
+    End Sub
+
+    Private Sub BindSTTradeGrid_ListChanged(sender As Object, e As ListChangedEventArgs) Handles BindSTTradeGrid.ListChanged
+        RecountChronStats()
+    End Sub
+
+    Private Sub BindSTErrorGrid_ListChanged(sender As Object, e As ListChangedEventArgs) Handles BindSTErrorGrid.ListChanged
+        RecountChronStats()
+    End Sub
+
+    Private Sub cv_STIEvents_OnSTIShutdown() Handles cv_STIEvents.OnSTIShutdown
+        If cv_ChronItemList.Count > 0 Then
+            SaveList(AUTOSAVE_FILE)
+        End If
+        MsgBox("Sterling Trader Pro no longer detected.")
+        Environment.Exit(0)
     End Sub
 #End Region
 End Class
